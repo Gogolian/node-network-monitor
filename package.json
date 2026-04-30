@@ -1,0 +1,20 @@
+{
+  "name": "node-network-monitor",
+  "version": "1.0.0",
+  "main": "src/monitor.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "network",
+    "monitor",
+    "traffic",
+    "cli"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "Dependency-free Node.js network traffic monitor",
+  "bin": {
+    "network-monitor": "bin/network-monitor.js"
+  }
+}
