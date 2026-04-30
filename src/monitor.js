@@ -124,11 +124,16 @@ function diffSnapshots(previous, current, seconds) {
   const previousByName = new Map(previous.map((entry) => [entry.name, entry]));
 
   return current.map((entry) => {
-    const old = previousByName.get(entry.name) || entry;
-    const rxBytes = Math.max(0, entry.rxBytes - old.rxBytes);
-    const txBytes = Math.max(0, entry.txBytes - old.txBytes);
-    const rxPackets = Math.max(0, entry.rxPackets - old.rxPackets);
-    const txPackets = Math.max(0, entry.txPackets - old.txPackets);
+    const old = previousByName.get(entry.name) || {
+      rxBytes: entry.rxBytes,
+      txBytes: entry.txBytes,
+      rxPackets: entry.rxPackets,
+      txPackets: entry.txPackets,
+    };
+    const rxBytes = nonNegativeDelta(entry.rxBytes, old.rxBytes);
+    const txBytes = nonNegativeDelta(entry.txBytes, old.txBytes);
+    const rxPackets = nonNegativeDelta(entry.rxPackets, old.rxPackets);
+    const txPackets = nonNegativeDelta(entry.txPackets, old.txPackets);
 
     return {
       name: entry.name,
@@ -142,6 +147,10 @@ function diffSnapshots(previous, current, seconds) {
       totalTxBytes: entry.txBytes,
     };
   });
+}
+
+function nonNegativeDelta(current, previous) {
+  return Math.max(0, current - previous);
 }
 
 function formatBytes(value) {
