@@ -78,6 +78,24 @@ test('filters and diffs snapshots', () => {
   ]);
 });
 
+test('diff treats newly discovered interfaces as zero-rate baselines', () => {
+  assert.deepEqual(diffSnapshots([], [
+    { name: 'eth1', rxBytes: 500, rxPackets: 5, txBytes: 700, txPackets: 7 },
+  ], 1), [
+    {
+      name: 'eth1',
+      rxBytes: 0,
+      txBytes: 0,
+      rxPackets: 0,
+      txPackets: 0,
+      rxBytesPerSecond: 0,
+      txBytesPerSecond: 0,
+      totalRxBytes: 500,
+      totalTxBytes: 700,
+    },
+  ]);
+});
+
 test('formats bytes', () => {
   assert.equal(formatBytes(500), '500 B');
   assert.equal(formatBytes(1536), '1.5 KB');

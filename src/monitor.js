@@ -4,6 +4,7 @@ const { execFile } = require('child_process');
 const { promisify } = require('util');
 
 const execFileAsync = promisify(execFile);
+const LINUX_PROC_NET_DEV_FIELD_COUNT = 16;
 
 function parseLinuxProcNetDev(contents) {
   const interfaces = [];
@@ -22,7 +23,7 @@ function parseLinuxProcNetDev(contents) {
       .split(/\s+/)
       .map((value) => Number(value));
 
-    if (fields.length < 16 || fields.some((value) => Number.isNaN(value))) continue;
+    if (fields.length < LINUX_PROC_NET_DEV_FIELD_COUNT || fields.some((value) => Number.isNaN(value))) continue;
 
     interfaces.push({
       name,
