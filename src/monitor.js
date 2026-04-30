@@ -44,24 +44,19 @@ function parseDarwinNetstat(contents) {
 
   if (!header) return [];
 
-  const columns = header.trim().split(/\s+/);
-  const nameIndex = columns.indexOf('Name');
-  const ibytesIndex = columns.indexOf('Ibytes');
-  const obytesIndex = columns.indexOf('Obytes');
-  const ipktsIndex = columns.indexOf('Ipkts');
-  const opktsIndex = columns.indexOf('Opkts');
-
-  if (nameIndex === -1 || ibytesIndex === -1 || obytesIndex === -1) return [];
+  if (!/\bIbytes\b/.test(header) || !/\bObytes\b/.test(header)) return [];
 
   for (const line of contents.split('\n')) {
     if (!line.trim() || /^Name\s+/.test(line)) continue;
 
     const fields = line.trim().split(/\s+/);
-    const name = fields[nameIndex];
-    const rxBytes = Number(fields[ibytesIndex]);
-    const txBytes = Number(fields[obytesIndex]);
-    const rxPackets = ipktsIndex === -1 ? 0 : Number(fields[ipktsIndex]);
-    const txPackets = opktsIndex === -1 ? 0 : Number(fields[opktsIndex]);
+    if (fields.length < 8) continue;
+
+    const name = fields[0];
+    const rxPackets = Number(fields.at(-7));
+    const rxBytes = Number(fields.at(-5));
+    const txPackets = Number(fields.at(-4));
+    const txBytes = Number(fields.at(-2));
 
     if (!name || Number.isNaN(rxBytes) || Number.isNaN(txBytes)) continue;
 
