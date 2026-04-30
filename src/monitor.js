@@ -163,7 +163,7 @@ function formatBytes(value) {
     unit += 1;
   }
 
-  return `${amount.toFixed(amount >= 10 || unit === 0 ? 0 : 1)} ${units[unit]}`;
+  return `${amount.toFixed(Math.abs(amount) >= 10 || unit === 0 ? 0 : 1)} ${units[unit]}`;
 }
 
 function formatReport(samples) {
