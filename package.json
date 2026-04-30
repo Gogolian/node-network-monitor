@@ -1,9 +1,13 @@
 {
   "name": "node-network-monitor",
   "version": "1.0.0",
+  "description": "Dependency-free Node.js network traffic monitor",
   "main": "src/monitor.js",
   "scripts": {
     "test": "node --test"
+  },
+  "bin": {
+    "network-monitor": "bin/network-monitor.js"
   },
   "keywords": [
     "network",
@@ -11,10 +15,17 @@
     "traffic",
     "cli"
   ],
-  "author": "",
+  "author": "Gogolian",
   "license": "ISC",
-  "description": "Dependency-free Node.js network traffic monitor",
-  "bin": {
-    "network-monitor": "bin/network-monitor.js"
-  }
+  "engines": {
+    "node": ">=16.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gogolian/node-network-monitor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Gogolian/node-network-monitor/issues"
+  },
+  "homepage": "https://github.com/Gogolian/node-network-monitor#readme"
 }

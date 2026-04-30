@@ -7,6 +7,8 @@ const {
   knownInterfaceNames,
   sleep,
 } = require('../src/monitor');
+const { parseArgs } = require('../src/cli');
+const pkg = require('../package.json');
 
 function printHelp() {
   console.log(`Usage: network-monitor [options]
@@ -19,51 +21,8 @@ Options:
       --interfaces <names>   Comma-separated interface names to include
       --json                 Print newline-delimited JSON instead of a table
       --list                 List detected network interface names
+  -v, --version              Show version
   -h, --help                 Show this help message`);
-}
-
-function parseArgs(argv) {
-  const options = {
-    interval: 1,
-    count: Infinity,
-    interfaces: [],
-    json: false,
-    list: false,
-    help: false,
-  };
-
-  for (let index = 0; index < argv.length; index += 1) {
-    const arg = argv[index];
-
-    if (arg === '-h' || arg === '--help') {
-      options.help = true;
-    } else if (arg === '--json') {
-      options.json = true;
-    } else if (arg === '--list') {
-      options.list = true;
-    } else if (arg === '-i' || arg === '--interval') {
-      index += 1;
-      options.interval = Number(argv[index]);
-    } else if (arg === '-n' || arg === '--count') {
-      index += 1;
-      options.count = Number(argv[index]);
-    } else if (arg === '--interfaces') {
-      index += 1;
-      options.interfaces = argv[index].split(',').map((name) => name.trim()).filter(Boolean);
-    } else {
-      throw new Error(`Unknown option: ${arg}`);
-    }
-  }
-
-  if (!Number.isFinite(options.interval) || options.interval <= 0) {
-    throw new Error('Interval must be a positive number of seconds.');
-  }
-
-  if ((!Number.isFinite(options.count) && options.count !== Infinity) || options.count <= 0) {
-    throw new Error('Count must be a positive number.');
-  }
-
-  return options;
 }
 
 async function main() {
@@ -71,6 +30,11 @@ async function main() {
 
   if (options.help) {
     printHelp();
+    return;
+  }
+
+  if (options.version) {
+    console.log(pkg.version);
     return;
   }
 
